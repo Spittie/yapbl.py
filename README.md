@@ -11,11 +11,14 @@ This is a simple library to utilize PushBullet from Python. It doesn't try to do
 * Single file, easy to drop in a quick project
 
 ### How to install
-You can just download [yabpl.py](https://raw.githubusercontent.com/Spittie/yapbl.py/master/yapbl/yapbl.py) from the repository, and drop it into your project.
-If you want to install the package, since it's not yet on PyPi you need to use install ```git+git://github.com/Spittie/yapbl.py.git```
+You can just download [yabpl.py](https://raw.githubusercontent.com/Spittie/yapbl.py/master/yapbl/yapbl.py)
+from the repository, and drop it into your project.
+If you want to install the package, since it's not yet on PyPi you need to use install
+```pip install git+git://github.com/Spittie/yapbl.py.git```
 
 ### How to use it
-Most methods are supported by every class, so for example you can use ```.push_note('something', 'something')``` on both a device, a contact or your whole pushbullet account
+Most methods are supported by every class, so for example you can use
+```.push_note('something', 'something')``` on both a device, a contact or your whole pushbullet account
 
 ```python
 
@@ -23,8 +26,10 @@ Most methods are supported by every class, so for example you can use ```.push_n
     from yapbl import PushBullet
 
     # Create a PushBullet instance
-    # Obviously replace api_key with your actual Api Key, you can get one from https://www.pushbullet.com/account
-    # api_key is optional, if not present yapbl will search PUSHBULLET_API_KEY in os.environ
+    # Obviously replace api_key with your actual Api Key
+    # You can get one from https://www.pushbullet.com/account
+    # api_key is optional
+    # If not present yapbl will search PUSHBULLET_API_KEY in os.environ
     p = PushBullet(api_key)
 
     # Get your devices
@@ -65,7 +70,8 @@ Most methods are supported by every class, so for example you can use ```.push_n
     # There's no size limit for that
     p.push_file('https://www.pushbullet.com/img/header-logo.png')
 
-    # yapbl will try to guess the correct mimetype based on the filename, but you can always override that
+    # yapbl will try to guess the correct mimetype based on the filename
+    # But you can always override that
     p.push_file('https://www.pushbullet.com/img/header-logo.png', file_type='image/png')
 
     # You can set a custom filename as well
@@ -76,7 +82,7 @@ Most methods are supported by every class, so for example you can use ```.push_n
     devices[0].delete()
     contacts[0].delete()
 
-    # If you need it, you can create your own device without having to request if from PushBullet
+    # If you need it, you can create your own device
     from yapbl import Device
     d = {'iden': 'device-iden',
          'model': 'device-model',
