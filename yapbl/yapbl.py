@@ -4,51 +4,26 @@ import os
 import requests
 
 
-class PushBullet(object):
-    DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
-
-    def __init__(self, api_key=None):
-        self.api_key = api_key
-        if not api_key:
-            try:
-                self.api_key = os.environ['PUSHBULLET_API_KEY']
-            except KeyError:
-                raise TypeError('Missing api_key')
-        self._s = requests.session()
-        self._s.auth = (self.api_key, '')
-
-    def __repr__(self):
-        return '<PushBullet [{}]>'.format(self.api_key)
-
-    def devices(self):
-        r = self._s.get(self.DEVICES_URL)
-        if r.status_code == 401:
-            return 'Authentication error'
-        return [Device(self.api_key, device) for device in r.json()['devices']]
-
-
-class Device(object):
+class _PushBullet(object):
     DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
     PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
     UPLOAD_URL = 'https://api.pushbullet.com/v2/upload-request'
     UPLOAD_LIMIT = 25000000
 
-    def __init__(self, api_key, device):
+    def __init__(self, api_key=None):
         self.api_key = api_key
-        self.iden = device['iden']
-        self.type = device['type']
-        self.active = device['active']
-        self.model = device['model']
-        self.pushable = device['pushable']
+        if not api_key:
+            try:
+                os.getenv['PUSHBULLET_API_KEY']
+            except KeyError:
+                raise TypeError('Missing api_key')
         self._s = requests.session()
         self._s.auth = (self.api_key, '')
         self._s.headers = {'Content-Type': 'application/json'}
 
-    def __repr__(self):
-        return '<Device [{} - {}]>'.format(self.model, self.iden)
-
     def _push(self, data):
-        data['device_iden'] = self.iden
+        if 'iden' in locals():
+            data['device_iden'] = self.iden
         return self._s.post(self.PUSH_URL, data=json.dumps(data))
 
     def push_note(self, title, body):
@@ -104,6 +79,30 @@ class Device(object):
                 'file_name': file_name,
                 'file_url': file_url}
         return self._push(data)
+
+
+class PushBullet(_PushBullet):
+    def __repr__(self):
+        return '<PushBullet [{}]>'.format(self.api_key)
+
+    def devices(self):
+        r = self._s.get(self.DEVICES_URL)
+        if r.status_code == 401:
+            return 'Authentication error'
+        return [Device(device, self.api_key) for device in r.json()['devices'] if device['active'] is not False]
+
+
+class Device(_PushBullet):
+    def __init__(self, device, api_key=None):
+        self.iden = device['iden']
+        self.type = device['type']
+        self.active = device['active']
+        self.model = device['model']
+        self.pushable = device['pushable']
+        super(Device, self).__init__(api_key)
+
+    def __repr__(self):
+        return '<Device [{} - {}]>'.format(self.model, self.iden)
 
     def delete(self):
         self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden))
