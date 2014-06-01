@@ -52,7 +52,7 @@ class _PushBullet(object):
                 'body': body}
         return self._push(data)
 
-    def push_link(self, url, body=None, title=None):
+    def push_link(self, url, title=None, body=None):
         data = {'type': 'link',
                 'title': title,
                 'url': url,
@@ -120,7 +120,6 @@ class PushBullet(_PushBullet):
 class Device(_PushBullet):
     def __init__(self, device, api_key=None):
         self.iden = device['iden']
-        self.type = device['type']
         self.model = device['model']
         self.pushable = device['pushable']
         super(Device, self).__init__(api_key)
