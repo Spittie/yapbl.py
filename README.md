@@ -60,7 +60,7 @@ p.push_address('Milan, Italy')
 
 # You can push a list
 # The items of the list are an array
-p.push_list('Test list', ['first', 'second', 'third', fourth'])
+p.push_list('Test list', ['first', 'second', 'third', 'fourth'])
 
 # You can send a local file
 # Max size is 25MB
@@ -96,3 +96,5 @@ c = {'iden': 'contact-iden',
      'name': 'contact-name'}
 contact = Contact(c, api_key)
 ```
+
+If there is any problem with the connection, yapbl will raise a TypeError.
