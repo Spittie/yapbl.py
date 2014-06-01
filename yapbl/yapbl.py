@@ -40,9 +40,9 @@ class _PushBullet(object):
         self._s.headers = {'Content-Type': 'application/json'}
 
     def _push(self, data):
-        if 'iden' in locals():
+        if hasattr(locals()['self'], 'iden'):
             data['device_iden'] = self.iden
-        if 'email' in locals():
+        if hasattr(locals()['self'], 'email'):
             data['email'] = self.email
         return _pushbullet_responses(self._s.post(self.PUSH_URL, data=json.dumps(data)))
 
