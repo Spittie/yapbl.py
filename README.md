@@ -8,6 +8,7 @@ This is a simple library to utilize PushBullet from Python. It doesn't try to do
 * Support push to your whole PushBullet account, your devices and your contacts
 * Support pushing of local and remote (urls) files
 * Read your api key from the os environment
+* Use the v2 api
 * Single file, easy to drop in a quick project
 
 ### How to install
