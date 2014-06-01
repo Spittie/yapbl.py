@@ -4,6 +4,23 @@ import os
 import requests
 
 
+def _pushbullet_responses(r):
+    if r.status_code == 200:
+        return True
+    elif r.status_code == 204:
+        return True     # File upload
+    elif r.status_code == 400:
+        raise TypeError('Bad request')
+    elif r.status_code == 401:
+        raise TypeError('Invalid Api Key')
+    elif r.status_code == 403:
+        raise TypeError('Invalid Api Key')
+    elif r.status_code == 404:
+        raise TypeError('Item not found')
+    else:
+        raise TypeError('Server Error')
+
+
 class _PushBullet(object):
     DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
     PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
@@ -27,7 +44,7 @@ class _PushBullet(object):
             data['device_iden'] = self.iden
         if 'email' in locals():
             data['email'] = self.email
-        return self._s.post(self.PUSH_URL, data=json.dumps(data))
+        return _pushbullet_responses(self._s.post(self.PUSH_URL, data=json.dumps(data)))
 
     def push_note(self, title, body):
         data = {'type': 'note',
@@ -65,11 +82,12 @@ class _PushBullet(object):
             payload = {'file_type': file_type,
                        'file_name': file_name}
             r = self._s.get(self.UPLOAD_URL, params=payload)
+            _pushbullet_responses(r)
             file_url = r.json()['file_url']
             upload_url = r.json()['upload_url']
             data = r.json()['data']
             files = {'file': pfile}
-            requests.post(upload_url, files=files, data=data)
+            _pushbullet_responses(requests.post(upload_url, files=files, data=data))
         # String/url
         else:
             if not file_type:
@@ -90,12 +108,12 @@ class PushBullet(_PushBullet):
 
     def devices(self):
         r = self._s.get(self.DEVICES_URL)
-        if r.status_code == 401:
-            return 'Authentication error'
+        _pushbullet_responses(r)
         return [Device(device, self.api_key) for device in r.json()['devices'] if device['active'] is not False]
 
     def contacts(self):
         r = self._s.get(self.CONTACTS_URL)
+        _pushbullet_responses(r)
         return [Contact(contact, self.api_key) for contact in r.json()['contacts'] if contact['active'] is not False]
 
 
@@ -111,7 +129,7 @@ class Device(_PushBullet):
         return '<Device [{} - {}]>'.format(self.model, self.iden)
 
     def delete(self):
-        self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden))
+        return _pushbullet_responses(self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden)))
 
 
 class Contact(_PushBullet):
@@ -125,4 +143,4 @@ class Contact(_PushBullet):
         return '<Contact [{} - {}]>'.format(self.name, self.email)
 
     def delete(self):
-        self._s.delete('{}/{}'.format(self.CONTACTS_URL, self.iden))
+        return _pushbullet_responses(self._s.delete('{}/{}'.format(self.CONTACTS_URL, self.iden)))
