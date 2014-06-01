@@ -23,6 +23,7 @@ class PushBullet(object):
 
 
 class Device(object):
+    DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
     PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
     UPLOAD_URL = 'https://api.pushbullet.com/v2/upload-request'
     UPLOAD_LIMIT = 25000000
@@ -99,3 +100,5 @@ class Device(object):
                 'file_url': file_url}
         return self._push(data)
 
+    def delete(self):
+        self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden))
