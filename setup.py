@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name='yapbl.py',
+    name='yapbl',
     version='0.1',
     packages=[''],
     url='https://github.com/Spittie/yapbl.py',
