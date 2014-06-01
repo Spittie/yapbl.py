@@ -1,4 +1,4 @@
-# YAPBL
+# YAPBL.py
 ## Yet Another PushBullet Library
 
 This is a simple library to utilize PushBullet from Python. It doesn't try to do any magic, but tries to be simple to use.
