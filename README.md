@@ -16,7 +16,7 @@ This is a simple library to utilize PushBullet from Python. It doesn't try to do
 * [requests](python-requests.org)
 
 ### How to install
-You can just download [yabpl.py](https://raw.githubusercontent.com/Spittie/yapbl.py/master/yapbl/yapbl.py) from the repository, and drop it into your project.
+You can just download [yabpl.py](https://raw.githubusercontent.com/Spittie/yapbl.py/master/yapbl/yapbl.py) from the repository, and drop it into your project.  
 If you want to install the package, since it's not yet on PyPi you need to use install  
 ```pip install git+git://github.com/Spittie/yapbl.py.git```
 
