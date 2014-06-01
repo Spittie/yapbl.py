@@ -70,7 +70,7 @@ class _PushBullet(object):
                 'items': items}
         return self._push(data)
 
-    def push_file(self, pfile, file_type=None, file_name=None):
+    def push_file(self, pfile, body=None, file_type=None, file_name=None):
         # FP
         if not isinstance(pfile, str):
             if os.fstat(pfile.fileno()).st_size > self.UPLOAD_LIMIT:
@@ -98,7 +98,8 @@ class _PushBullet(object):
         data = {'type': 'file',
                 'file_type': file_type,
                 'file_name': file_name,
-                'file_url': file_url}
+                'file_url': file_url,
+                'body': body}
         return self._push(data)
 
 
