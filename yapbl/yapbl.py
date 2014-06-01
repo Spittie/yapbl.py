@@ -76,7 +76,7 @@ class _PushBullet(object):
             if os.fstat(pfile.fileno()).st_size > self.UPLOAD_LIMIT:
                 return 'File too big'
             if not file_type:
-                file_type = mimetypes.guess_type(pfile.name)
+                file_type, __ = mimetypes.guess_type(pfile.name)
             if not file_name:
                 file_name = pfile.name
             payload = {'file_type': file_type,
@@ -91,7 +91,7 @@ class _PushBullet(object):
         # String/url
         else:
             if not file_type:
-                file_type = mimetypes.guess_type(pfile)
+                file_type, __ = mimetypes.guess_type(pfile)
             if not file_name:
                 __, file_name = pfile.rsplit('/', 1)
             file_url = pfile
