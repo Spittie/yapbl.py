@@ -7,8 +7,13 @@ import requests
 class PushBullet(object):
     DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
 
-    def __init__(self, api_key):
+    def __init__(self, api_key=None):
         self.api_key = api_key
+        if not api_key:
+            try:
+                self.api_key = os.environ['PUSHBULLET_API_KEY']
+            except KeyError:
+                raise TypeError('Missing api_key')
         self._s = requests.session()
         self._s.auth = (self.api_key, '')
 
