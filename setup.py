@@ -4,9 +4,10 @@ setup(
     name='yapbl.py',
     version='0.1',
     packages=[''],
-    url='',
+    url='https://github.com/Spittie/yapbl.py',
     license='ISC',
     author='Spittie',
     author_email='spittiepie@gmail.com',
-    description='Yet Another PushBullet Library'
+    description='Yet Another PushBullet Library',
+    requires=['requests']
 )
