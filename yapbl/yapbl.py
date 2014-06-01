@@ -32,7 +32,7 @@ class _PushBullet(object):
         self.api_key = api_key
         if not api_key:
             try:
-                self.api_key = os.getenv['PUSHBULLET_API_KEY']
+                self.api_key = os.getenv('PUSHBULLET_API_KEY')
             except KeyError:
                 raise TypeError('Missing api_key')
         self._s = requests.session()
