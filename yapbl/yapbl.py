@@ -25,7 +25,7 @@ class _PushBullet(object):
     DEVICES_URL = 'https://api.pushbullet.com/v2/devices'
     PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
     UPLOAD_URL = 'https://api.pushbullet.com/v2/upload-request'
-    UPLOAD_LIMIT = 25000000
+    UPLOAD_LIMIT = 25*1024*1024
     CONTACTS_URL = 'https://api.pushbullet.com/v2/contacts'
 
     def __init__(self, api_key=None):
