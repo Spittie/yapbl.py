@@ -74,13 +74,16 @@ p.push_file(open('local.png', 'rb'))
 # There's no size limit for that
 p.push_file('https://www.pushbullet.com/img/header-logo.png')
 
+# You can add an optional body to that
+p.push_file('https://www.pushbullet.com/img/header-logo.png', body='hi!')
+
 # yapbl will try to guess the correct mimetype based on the filename
 # But you can always override that
 p.push_file('https://www.pushbullet.com/img/header-logo.png', file_type='image/png')
 
 # You can set a custom filename as well
 # Otherwise the actual name will be used
-p.push_file('https://www.pushbullet.com/img/header-logo.png' file_name='image')
+p.push_file('https://www.pushbullet.com/img/header-logo.png' file_name='image.png')
 
 # You can delete a device or a contact
 devices[0].delete()
