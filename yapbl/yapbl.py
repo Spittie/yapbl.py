@@ -9,12 +9,13 @@ class _PushBullet(object):
     PUSH_URL = 'https://api.pushbullet.com/v2/pushes'
     UPLOAD_URL = 'https://api.pushbullet.com/v2/upload-request'
     UPLOAD_LIMIT = 25000000
+    CONTACTS_URL = 'https://api.pushbullet.com/v2/contacts'
 
     def __init__(self, api_key=None):
         self.api_key = api_key
         if not api_key:
             try:
-                os.getenv['PUSHBULLET_API_KEY']
+                self.api_key = os.getenv['PUSHBULLET_API_KEY']
             except KeyError:
                 raise TypeError('Missing api_key')
         self._s = requests.session()
@@ -24,6 +25,8 @@ class _PushBullet(object):
     def _push(self, data):
         if 'iden' in locals():
             data['device_iden'] = self.iden
+        if 'email' in locals():
+            data['email'] = self.email
         return self._s.post(self.PUSH_URL, data=json.dumps(data))
 
     def push_note(self, title, body):
@@ -91,12 +94,15 @@ class PushBullet(_PushBullet):
             return 'Authentication error'
         return [Device(device, self.api_key) for device in r.json()['devices'] if device['active'] is not False]
 
+    def contacts(self):
+        r = self._s.get(self.CONTACTS_URL)
+        return [Contact(contact, self.api_key) for contact in r.json()['contacts'] if contact['active'] is not False]
+
 
 class Device(_PushBullet):
     def __init__(self, device, api_key=None):
         self.iden = device['iden']
         self.type = device['type']
-        self.active = device['active']
         self.model = device['model']
         self.pushable = device['pushable']
         super(Device, self).__init__(api_key)
@@ -106,3 +112,17 @@ class Device(_PushBullet):
 
     def delete(self):
         self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden))
+
+
+class Contact(_PushBullet):
+    def __init__(self, contact, api_key=None):
+        self.iden = contact['iden']
+        self.email = contact['email']
+        self.name = contact['name']
+        super(Contact, self).__init__(api_key)
+
+    def __repr__(self):
+        return '<Contact [{} - {}]>'.format(self.name, self.email)
+
+    def delete(self):
+        self._s.delete('{}/{}'.format(self.CONTACTS_URL, self.iden))
