@@ -156,6 +156,7 @@ class Contact(_PushBullet):
         self.iden = contact['iden']
         self.email = contact['email']
         self.name = contact['name']
+        self.json = contact
         super(Contact, self).__init__(api_key)
 
     def __repr__(self):
