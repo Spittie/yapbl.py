@@ -91,6 +91,15 @@ p.create_device('nickname')
 # You can delete a device or a contact
 devices[0].delete()
 contacts[0].delete()
+
+# Devices have various proprieties
+d = devices[0]
+d.iden
+d.type
+d.created
+d.modified
+d.active
+d.pushable
 ```
 
 If there is any problem with the connection, yapbl will raise a TypeError.

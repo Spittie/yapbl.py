@@ -109,15 +109,21 @@ class PushBullet(_PushBullet):
     def __repr__(self):
         return '<PushBullet [{}]>'.format(self.api_key)
 
-    def devices(self):
+    def devices(self, only_active=True):
         r = self._s.get(self.DEVICES_URL)
         _pushbullet_responses(r)
-        return [Device(device, self.api_key) for device in r.json()['devices'] if device['active'] is not False]
+        if only_active:
+            return [Device(device, self.api_key) for device in r.json()['devices'] if device['active'] is not False]
+        else:
+            return [Device(device, self.api_key) for device in r.json()['devices']]
 
-    def contacts(self):
+    def contacts(self, only_active=True):
         r = self._s.get(self.CONTACTS_URL)
         _pushbullet_responses(r)
-        return [Contact(contact, self.api_key) for contact in r.json()['contacts'] if contact['active'] is not False]
+        if only_active:
+            return [Contact(contact, self.api_key) for contact in r.json()['contacts'] if contact['active'] is not False]
+        else:
+            return [Contact(contact, self.api_key) for contact in r.json()['contacts']]
 
     def create_device(self, nickname, device_type='stream'):
         data = {'type': device_type,
@@ -130,11 +136,11 @@ class PushBullet(_PushBullet):
 class Device(_PushBullet):
     def __init__(self, device, api_key):
         self.iden = device['iden']
-        self.type = device['type']
+        self.type = device.get('type', 'inactive')
         self.created = datetime.date.fromtimestamp(math.floor(device['created']))
         self.modified = datetime.date.fromtimestamp(math.floor(device['modified']))
         self.active = device['active']
-        self.pushable = device['pushable']
+        self.pushable = device.get('pushable', False)
         self.json = device
         super(Device, self).__init__(api_key)
 
