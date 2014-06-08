@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='yapbl',
-    version='0.2',
+    version='0.3',
     packages=['yapbl'],
     url='https://github.com/Spittie/yapbl.py',
     license='MIT',
