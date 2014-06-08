@@ -1,1 +1,1 @@
-from .yapbl import PushBullet
+from .yapbl import PushBullet, Device, Contact

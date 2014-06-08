@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import os
+import datetime
 import requests
 
 
@@ -117,23 +118,34 @@ class PushBullet(_PushBullet):
         _pushbullet_responses(r)
         return [Contact(contact, self.api_key) for contact in r.json()['contacts'] if contact['active'] is not False]
 
+    def create_device(self, nickname, device_type='stream'):
+        data = {'type': device_type,
+                'nickname': nickname}
+        r = self._s.post(self.DEVICES_URL, data=json.dumps(data))
+        _pushbullet_responses(r)
+        return Device(r.json(), self.api_key)
+
 
 class Device(_PushBullet):
-    def __init__(self, device, api_key=None):
+    def __init__(self, device, api_key):
         self.iden = device['iden']
-        self.model = device['model']
+        self.type = device['type']
+        self.created = datetime.date.fromtimestamp(device['created'].split('.')[0])
+        self.modified = datetime.date.fromtimestamp(device['modified'].split('.')[0])
+        self.active = device['active']
         self.pushable = device['pushable']
+        self.json = device
         super(Device, self).__init__(api_key)
 
     def __repr__(self):
-        return '<Device [{} - {}]>'.format(self.model, self.iden)
+        return '<Device [{} - {}]>'.format(self.type, self.iden)
 
     def delete(self):
         return _pushbullet_responses(self._s.delete('{}/{}'.format(self.DEVICES_URL, self.iden)))
 
 
 class Contact(_PushBullet):
-    def __init__(self, contact, api_key=None):
+    def __init__(self, contact, api_key):
         self.iden = contact['iden']
         self.email = contact['email']
         self.name = contact['name']
