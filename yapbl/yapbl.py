@@ -1,9 +1,10 @@
+import datetime
 import json
+import math
 import mimetypes
 import os
-import datetime
 import requests
-import math
+
 
 def _pushbullet_responses(r):
     if r.status_code == 200:
