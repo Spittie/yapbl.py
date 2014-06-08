@@ -43,6 +43,10 @@ devices = p.devices()
 # It will return an array with your active contacts
 contacts = p.contacts()
 
+# Pass in only_active=False to get every device/contact
+every_devices = p.devices(only_active=False)
+every_contacts = p.contacts(only_active=False)
+
 # Send a note to every device/contact
 p.push_note('title', 'body')
 
@@ -100,6 +104,16 @@ d.created
 d.modified
 d.active
 d.pushable
+
+# Contacts too
+c = contacts[0]
+c.iden
+c.email
+c.type
+
+# You can access the full reply with the .json propriety
+d.json
+c.json
 ```
 
 If there is any problem with the connection, yapbl will raise a TypeError.
