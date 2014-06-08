@@ -3,7 +3,7 @@ import mimetypes
 import os
 import datetime
 import requests
-
+import math
 
 def _pushbullet_responses(r):
     if r.status_code == 200:
@@ -130,8 +130,8 @@ class Device(_PushBullet):
     def __init__(self, device, api_key):
         self.iden = device['iden']
         self.type = device['type']
-        self.created = datetime.date.fromtimestamp(device['created'].split('.')[0])
-        self.modified = datetime.date.fromtimestamp(device['modified'].split('.')[0])
+        self.created = datetime.date.fromtimestamp(math.floor(device['created']))
+        self.modified = datetime.date.fromtimestamp(math.floor(device['modified']))
         self.active = device['active']
         self.pushable = device['pushable']
         self.json = device
