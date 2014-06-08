@@ -84,23 +84,13 @@ p.push_file('https://www.pushbullet.com/img/header-logo.png', file_type='image/p
 # Otherwise the actual name will be used
 p.push_file('https://www.pushbullet.com/img/header-logo.png' file_name='image.png')
 
+# You can create a new stream device
+# device_type is optional and default to 'stream'
+p.create_device('nickname')
+
 # You can delete a device or a contact
 devices[0].delete()
 contacts[0].delete()
-
-# If you need it, you can create your own device
-from yapbl import Device
-d = {'iden': 'device-iden',
-     'model': 'device-model',
-     'pushable': True}
-device = Device(d, api_key)
-
-# Same for a contact
-from yapbl import Contact
-c = {'iden': 'contact-iden',
-     'email': 'contact-email',
-     'name': 'contact-name'}
-contact = Contact(c, api_key)
 ```
 
 If there is any problem with the connection, yapbl will raise a TypeError.
