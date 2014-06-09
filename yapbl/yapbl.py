@@ -137,8 +137,10 @@ class Device(_PushBullet):
     def __init__(self, device, api_key):
         self.iden = device['iden']
         self.type = device.get('type', 'inactive')
-        self.created = datetime.date.fromtimestamp(math.floor(device['created']))
-        self.modified = datetime.date.fromtimestamp(math.floor(device['modified']))
+        self.created = datetime.datetime.fromtimestamp(math.trunc(device['created']))
+        self.created = self.created.replace(microsecond=int(str(device['created']).split('.')[1][:6]))  # Ugly hack
+        self.modified = datetime.datetime.fromtimestamp(math.trunc(device['modified']))
+        self.modified = self.modified.replace(microsecond=int(str(device['modified']).split('.')[1][:6]))  # Ugly hack
         self.active = device['active']
         self.pushable = device.get('pushable', False)
         self.json = device
