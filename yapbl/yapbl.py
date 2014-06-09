@@ -156,8 +156,13 @@ class Device(_PushBullet):
 class Contact(_PushBullet):
     def __init__(self, contact, api_key):
         self.iden = contact['iden']
-        self.email = contact['email']
-        self.name = contact['name']
+        self.email = contact.get('email', 'inactive')
+        self.created = datetime.datetime.fromtimestamp(math.trunc(contact['created']))
+        self.created = self.created.replace(microsecond=int(str(contact['created']).split('.')[1][:6]))
+        self.modified = datetime.datetime.fromtimestamp(math.trunc(contact['modified']))
+        self.modified = self.modified.replace(microsecond=int(str(contact['modified']).split('.')[1][:6]))
+        self.active = contact['active']
+        self.name = contact.get('name', 'inactive')
         self.json = contact
         super(Contact, self).__init__(api_key)
 
